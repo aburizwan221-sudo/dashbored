@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact Us - Besa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f0ee;
+    --text: #1d1d1d;
+    --muted: #5f5f5f;
+    --line: #eaded9;
+    --orange: #eb5c2e;
+    --orange-dark: #d74d25;
+    --dark: #1b1b1b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; }
+  img { max-width: 100%; display: block; }
+  .container { width: min(1220px, calc(100% - 34px)); margin: 0 auto; }
+
+  /* ===== Topbar ===== */
+  .topbar { background: #fff; border-bottom: 1px solid #f0e7e3; color: #4d4d4d; font-size: 12px; }
+  .topbar-inner { display: flex; align-items: center; justify-content: space-between; min-height: 34px; gap: 16px; }
+  .topbar-right { display: flex; gap: 18px; flex-wrap: wrap; }
+
+  /* ===== Header ===== */
+  .header-wrap { background: #fff; border-bottom: 1px solid #f2ece9; position: relative; }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; min-height: 72px; gap: 18px; }
+  .brand-wrap { display: flex; align-items: center; gap: 18px; }
+  .hamburger { width: 26px; height: 18px; position: relative; cursor: pointer; z-index: 20; }
+  .hamburger span { position: absolute; left: 0; width: 100%; height: 2px; background: #3b3b3b; border-radius: 2px; transition: transform .3s ease, opacity .3s ease; }
+  .hamburger span:nth-child(1) { top: 0; }
+  .hamburger span:nth-child(2) { top: 8px; }
+  .hamburger span:nth-child(3) { bottom: 0; }
+  .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  .brand { font-size: 28px; font-weight: 800; letter-spacing: -0.05em; display: flex; align-items: center; }
+  .brand-mark { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg,#ff8f6a,var(--orange)); margin-right: 10px; }
+  .brand .dot { color: var(--orange); }
+
+  .search-wrap { flex: 1; display: flex; justify-content: center; }
+  .search-box { display: flex; align-items: center; width: min(520px,100%); border: 1px solid #e7d9d3; border-radius: 6px; background: #f5f5f5; overflow: hidden; min-height: 42px; }
+  .search-box input { flex: 1; background: transparent; border: 0; outline: none; padding: 0 14px; font-size: 14px; }
+  .search-btn { min-width: 90px; border: 0; background: var(--orange); color: #fff; font-weight: 600; cursor: pointer; transition: background .2s ease, transform .15s ease; }
+  .search-btn:hover { background: var(--orange-dark); }
+  .search-btn:active { transform: scale(.96); }
+
+  .header-actions { display: flex; align-items: center; gap: 16px; font-size: 13px; white-space: nowrap; }
+  .wishlist { width: 22px; height: 22px; border: 2px solid #2d2d2d; border-radius: 50%; }
+  .cart-amount { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+  .cart-icon { width: 17px; height: 15px; border: 2px solid #2d2d2d; border-radius: 4px; }
+
+  /* ===== Nav ===== */
+  .nav-wrap { background: linear-gradient(180deg, var(--orange), var(--orange-dark)); color: #fff; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; min-height: 52px; gap: 18px; }
+  .nav-links { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; font-size: 13px; font-weight: 600; }
+  .nav-links a { color: rgba(255,255,255,.96); transition: opacity .2s ease; }
+  .nav-links a:hover { opacity: .8; }
+  .recently-viewed { color: rgba(255,255,255,.9); font-size: 12px; white-space: nowrap; }
+
+  /* ===== Mobile nav drawer ===== */
+  .mobile-nav {
+    position: fixed;
+    top: 0; left: -290px;
+    width: 270px; height: 100%;
+    background: #fff;
+    box-shadow: 4px 0 20px rgba(0,0,0,.12);
+    z-index: 50;
+    padding: 24px 20px;
+    transition: left .35s ease;
+    overflow-y: auto;
+  }
+  .mobile-nav.open { left: 0; }
+  .mobile-nav a {
+    display: block;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0e7e3;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  .mobile-nav-close { font-size: 22px; margin-bottom: 12px; cursor: pointer; text-align: right; }
+  .nav-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 40;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+  }
+  .nav-overlay.show { opacity: 1; pointer-events: auto; }
+
+  /* ===== Hero ===== */
+  .hero { background: #f6efee; border-bottom: 1px solid #f1e6e4; position: relative; overflow: hidden; }
+  .hero-inner { display: flex; align-items: center; justify-content: space-between; min-height: 220px; padding: 10px 0 0; position: relative; z-index: 1; }
+  .hero-copy { padding: 28px 0 0; animation: fadeUp .7s ease both; }
+  .page-title { margin: 0; font-size: clamp(38px,5vw,58px); line-height: .94; letter-spacing: -0.05em; color: #171717; font-weight: 800; }
+  .crumbs { margin: 0 0 12px; color: #7a6663; font-size: 14px; }
+  .crumbs strong { color: #1e1e1e; font-weight: 700; }
+
+  .hero-visual { position: relative; width: 380px; height: 200px; flex-shrink: 0; display: flex; justify-content: flex-end; align-items: flex-end; animation: fadeIn .9s ease both .1s; }
+  .person { position: relative; width: 260px; height: 180px; display: flex; align-items: flex-end; justify-content: center; animation: floaty 4s ease-in-out infinite; }
+  .person img { width: 100%; height: 100%; object-fit: cover; border-radius: 45% 45% 30% 30% / 50% 50% 20% 20%; filter: drop-shadow(0 10px 18px rgba(0,0,0,.08)); }
+  .circle-dot { position: absolute; border-radius: 50%; background: rgba(236,100,61,.2); }
+  .circle-dot.one { width: 16px; height: 16px; right: 130px; top: 10px; }
+  .circle-dot.two { width: 10px; height: 10px; right: 100px; top: 42px; }
+  .circle-dot.three { width: 15px; height: 15px; right: 170px; top: 72px; }
+
+  /* ===== Main content ===== */
+  .main { padding: 42px 0 70px; }
+  .contact-grid { display: flex; gap: 34px; align-items: flex-start; }
+
+  .get-in-touch { flex: 1; animation: fadeUp .6s ease both; }
+  .get-in-touch h2 { font-size: 30px; font-weight: 800; margin: 0 0 10px; letter-spacing: -0.03em; }
+  .get-in-touch > p { color: var(--muted); font-size: 15px; line-height: 1.6; margin: 0 0 28px; max-width: 420px; }
+
+  .info-item { display: flex; gap: 14px; margin-bottom: 22px; }
+  .info-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--orange);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: transform .3s ease;
+  }
+  .info-item:hover .info-icon { transform: scale(1.1) rotate(6deg); }
+  .info-item h4 { margin: 0 0 4px; font-size: 15px; font-weight: 700; }
+  .info-item p { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+  .contact-form {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.04);
+    animation: popIn .6s ease both .1s;
+  }
+  .contact-form h3 { margin: 0 0 20px; font-size: 20px; font-weight: 800; }
+  .form-row { display: flex; gap: 16px; margin-bottom: 16px; }
+  .form-group { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 13px; font-weight: 600; }
+  .form-group label .req { color: var(--orange); }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    background: #fbfbfb;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(235,92,46,.12);
+  }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+  .submit-btn {
+    width: 100%;
+    border: 0;
+    background: var(--orange);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .2s ease, transform .15s ease;
+  }
+  .submit-btn:hover { background: var(--orange-dark); }
+  .submit-btn:active { transform: scale(.98); }
+
+  /* ===== Perks strip ===== */
+  .perks {
+    margin-top: 40px;
+    background: #fbe9e4;
+    border-radius: 14px;
+    padding: 26px 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .perk { display: flex; align-items: center; gap: 12px; flex: 1 1 200px; animation: popIn .6s ease both; transition: transform .3s ease; }
+  .perk:nth-child(1) { animation-delay: .05s; }
+  .perk:nth-child(2) { animation-delay: .12s; }
+  .perk:nth-child(3) { animation-delay: .19s; }
+  .perk:nth-child(4) { animation-delay: .26s; }
+  .perk:hover { transform: translateY(-4px); }
+  .perk-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border-radius: 10px;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--orange);
+    font-size: 18px;
+  }
+  .perk h5 { margin: 0 0 2px; font-size: 14px; font-weight: 700; }
+  .perk p { margin: 0; font-size: 12px; color: var(--muted); }
+
+  /* ===== Animations ===== */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes popIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 980px) {
+    .contact-grid { flex-direction: column; }
+    .hero-inner { flex-direction: column; align-items: flex-start; padding-bottom: 16px; }
+    .hero-visual { width: 100%; max-width: 380px; }
+  }
+
+  @media (max-width: 760px) {
+    .nav-links, .nav-wrap .recently-viewed { display: none; }
+    .topbar-inner { flex-wrap: wrap; padding: 8px 0; }
+    .search-wrap { order: 3; width: 100%; margin-top: 8px; }
+    .header-inner { flex-wrap: wrap; }
+    .form-row { flex-direction: column; }
+    .perks { flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div>Shopping Hotline: (+1) 650-567-8899</div>
+      <div class="topbar-right">
+        <a href="#">Guide &amp; Support</a>
+        <a href="#">English</a>
+        <a href="#">Order Tracking</a>
+        <a href="#">Login</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="header-wrap">
+    <div class="container header-inner">
+      <div class="brand-wrap">
+        <div class="hamburger" id="hamburgerBtn" aria-label="menu">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>Besa</span>
+          <span class="dot">.</span>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <div class="search-box">
+          <input type="text" placeholder="Search for products...">
+          <button class="search-btn" type="button">Search</button>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="wishlist"></div>
+        <div class="cart-amount">
+          <span class="cart-icon"></span>
+          <span>$0.00</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav-wrap">
+    <div class="container nav-inner">
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">Pages</a>
+        <a href="#">Electronics Devices</a>
+        <a href="#">Blog</a>
+        <a href="#">Become A Vendor</a>
+        <a href="#">Flash Deals</a>
+      </div>
+      <div class="recently-viewed">Recently Viewed</div>
+    </div>
+  </nav>
+
+  <!-- Mobile nav drawer -->
+  <div class="nav-overlay" id="navOverlay"></div>
+  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-close" id="mobileNavClose">&times;</div>
+    <a href="#">Home</a>
+    <a href="#">Shop</a>
+    <a href="#">Pages</a>
+    <a href="#">Electronics Devices</a>
+    <a href="#">Blog</a>
+    <a href="#">Become A Vendor</a>
+    <a href="#">Flash Deals</a>
+    <a href="#">Recently Viewed</a>
+    <a href="#">Guide &amp; Support</a>
+    <a href="#">Order Tracking</a>
+    <a href="#">Login</a>
+  </div>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <div class="crumbs">Home <span>&gt;</span> <strong>Contact Us</strong></div>
+        <h1 class="page-title">Contact Us</h1>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="circle-dot one"></div>
+        <div class="circle-dot two"></div>
+        <div class="circle-dot three"></div>
+        <div class="person">
+          <!-- apni image yahan lagao -->
+          <img src="../images/high10.png" alt="Contact Us Hero">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container main">
+    <div class="contact-grid">
+
+      <div class="get-in-touch">
+        <h2>Get in Touch</h2>
+        <p>We're here to help! Feel free to reach out to us for any questions, comments, or support.</p>
+
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div>
+            <h4>Our Location</h4>
+            <p>Aisle is located on the unceded territory of the Skwxwú7mesh, Stó:lō, Səlílwətaʔ/Selilwitulh &amp; xʷməθkʷəy̓əm Nations.</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">✉️</div>
+          <div>
+            <h4>Email Us</h4>
+            <p>support@besa.com</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">📞</div>
+          <div>
+            <h4>Call Us</h4>
+            <p>+1 650 567 - 8899</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">🕐</div>
+          <div>
+            <h4>Working Hours</h4>
+            <p>Mon - Fri: 9:00 AM - 6:00 PM</p>
+          </div>
+        </div>
+      </div>
+
+      <form class="contact-form">
+        <h3>Send Us a Message</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" placeholder="Enter your name" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" placeholder="Enter your email" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:16px;">
+          <label>Subject <span class="req">*</span></label>
+          <select required>
+            <option value="">Select subject</option>
+            <option>General Inquiry</option>
+            <option>Order Support</option>
+            <option>Vendor Partnership</option>
+            <option>Feedback</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>Message <span class="req">*</span></label>
+          <textarea placeholder="Type your message here..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+
+    <div class="perks">
+      <div class="perk">
+        <div class="perk-icon">🚚</div>
+        <div><h5>Free Shipping</h5><p>On orders over $100</p></div>
+      </div>
+      <div class="perk">
+        <div class="perk-icon">🎧</div>
+        <div><h5>24/7 Support</h5><p>Dedicated support</p></div>
+      </div>
+      <div class="perk">
+        <div class="perk-icon">↩️</div>
+        <div><h5>Easy Returns</h5><p>30 day return policy</p></div>
+      </div>
+      <div class="perk">
+        <div class="perk-icon">🔒</div>
+        <div><h5>Secure Payment</h5><p>100% secure payment</p></div>
+      </div>
+    </div>
+  </main>
+
+<script>
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileNav = document.getElementById('mobileNav');
+  const navOverlay = document.getElementById('navOverlay');
+  const mobileNavClose = document.getElementById('mobileNavClose');
+
+  function openNav() {
+    mobileNav.classList.add('open');
+    navOverlay.classList.add('show');
+    hamburgerBtn.classList.add('open');
+  }
+  function closeNav() {
+    mobileNav.classList.remove('open');
+    navOverlay.classList.remove('show');
+    hamburgerBtn.classList.remove('open');
+  }
+
+  hamburgerBtn.addEventListener('click', () => {
+    mobileNav.classList.contains('open') ? closeNav() : openNav();
+  });
+  navOverlay.addEventListener('click', closeNav);
+  mobileNavClose.addEventListener('click', closeNav);
+</script>
+
+</body>
+</html>
